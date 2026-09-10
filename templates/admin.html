@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUSHAL PANEL - Control Center</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(15, 23, 42, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent-purple: #c084fc;
+            --accent-indigo: #818cf8;
+            --accent-emerald: #34d399;
+        }
+
+        body {
+            /* Fullscreen Background Image */
+            background: url('/bg_image') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .navbar-custom {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 30px;
+        }
+
+        .kushal-logo {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            height: 100%;
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .icon-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+        .icon-green { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+        .icon-amber { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .icon-pink { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+
+        .stat-num { font-size: 32px; font-weight: 800; }
+        .stat-title { color: var(--text-secondary); font-size: 14px; margin-bottom: 15px; }
+
+        .btn-glass-reset {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .btn-glass-reset:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .today-box {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(99, 102, 241, 0.2));
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .table-custom { color: #fff; vertical-align: middle; }
+        .table-custom th { color: var(--text-secondary); border-bottom: 1px solid var(--glass-border); font-size: 13px; }
+        .table-custom td { border-bottom: 1px solid var(--glass-border); }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .badge-pending { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); }
+        .badge-approved { background: rgba(52, 211, 153, 0.2); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.4); }
+        .badge-rejected { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+
+        .form-control-glass {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+        }
+        .form-control-glass:focus {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: var(--accent-purple);
+            color: #fff;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="navbar-custom d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="kushal-logo"><i class="fa-solid fa-crown me-2"></i>KUSHAL PANEL</div>
+            <span class="badge bg-success rounded-pill px-3 py-2"><i class="fa-solid fa-circle me-1 small"></i> Live</span>
+        </div>
+        <a href="/logout" class="btn btn-sm btn-outline-danger px-3"><i class="fa-solid fa-power-off me-1"></i> Logout</a>
+    </div>
+
+    <div class="container-fluid px-4">
+
+        <!-- Stat Cards Grid -->
+        <div class="row g-3 mb-4">
+            <!-- Total Users -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card">
+                    <div class="stat-icon icon-purple"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-num">{{ total_users }}</div>
+                    <div class="stat-title">Total Bot Users</div>
+                </div>
+            </div>
+
+            <!-- Active Subs -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card">
+                    <div class="stat-icon icon-green"><i class="fa-solid fa-user-check"></i></div>
+                    <div class="stat-num">{{ active_subscribers }}</div>
+                    <div class="stat-title">Active Subscribers</div>
+                    <a href="/reset/subscribers" class="btn-glass-reset"><i class="fa-solid fa-rotate-left me-1"></i> Reset Active</a>
+                </div>
+            </div>
+
+            <!-- Pending -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card">
+                    <div class="stat-icon icon-amber"><i class="fa-solid fa-clock"></i></div>
+                    <div class="stat-num">{{ pending_payments }}</div>
+                    <div class="stat-title">Pending Approvals</div>
+                    <a href="/reset/pending" class="btn-glass-reset"><i class="fa-solid fa-rotate-left me-1"></i> Clear Pending</a>
+                </div>
+            </div>
+
+            <!-- Total Revenue -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card">
+                    <div class="stat-icon icon-pink"><i class="fa-solid fa-wallet"></i></div>
+                    <div class="stat-num">₹{{ total_revenue }}</div>
+                    <div class="stat-title">Total Revenue</div>
+                    <a href="/reset/revenue" class="btn-glass-reset"><i class="fa-solid fa-rotate-left me-1"></i> Reset Revenue</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Earning Box -->
+        <div class="today-box mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="fw-bold text-warning mb-1"><i class="fa-solid fa-chart-line me-2"></i>Today's Earnings ({{ current_date }})</h5>
+                    <h1 class="display-4 fw-bold mb-2">₹{{ today_earning }}</h1>
+                    <p class="text-light small mb-0"><i class="fa-solid fa-clock me-1"></i> Last refreshed at: {{ last_updated }}</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <span class="badge bg-success fs-6 px-4 py-3"><i class="fa-solid fa-arrow-up me-2"></i>₹{{ today_earning }} Earned Today</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings & Verification Section -->
+        <div class="row g-4">
+            <!-- Settings Card -->
+            <div class="col-lg-4">
+                <div class="glass-card">
+                    <h5 class="fw-bold mb-3 border-bottom border-secondary pb-2"><i class="fa-solid fa-gear me-2 text-info"></i>Bot Configuration</h5>
+                    <form action="/update_settings" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small">Merchant UPI ID</label>
+                            <input type="text" class="form-control form-control-glass" name="upi_id" value="{{ upi_id }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small">VIP Demo Link</label>
+                            <input type="url" class="form-control form-control-glass" name="demo_link" value="{{ demo_link }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small">Change QR Image (JPG)</label>
+                            <input type="file" class="form-control form-control-glass" name="qr_file" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold mt-2"><i class="fa-solid fa-floppy-disk me-2"></i>Save Configuration</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Live Verification Requests -->
+            <div class="col-lg-8">
+                <div class="glass-card">
+                    <h5 class="fw-bold mb-3 border-bottom border-secondary pb-2"><i class="fa-solid fa-receipt me-2 text-warning"></i>Live Screenshot Verification</h5>
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>User Info</th>
+                                    <th>Amount</th>
+                                    <th>Screenshot</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tx in transactions %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ tx.username }}</strong><br>
+                                        <small class="text-secondary">ID: {{ tx.user_id }}</small>
+                                    </td>
+                                    <td class="fw-bold text-warning">₹{{ tx.amount }}</td>
+                                    <td>
+                                        {% if tx.file_id %}
+                                            <a href="/view_ss/{{ tx.id }}" target="_blank" class="btn btn-sm btn-outline-info px-2 py-1"><i class="fa-solid fa-eye me-1"></i>View SS</a>
+                                        {% else %}
+                                            <span class="text-secondary">No File</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if tx.status == 'PENDING' %}
+                                            <span class="status-badge badge-pending">PENDING</span>
+                                        {% elif tx.status == 'APPROVED' %}
+                                            <span class="status-badge badge-approved">APPROVED</span>
+                                        {% else %}
+                                            <span class="status-badge badge-rejected">REJECTED</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if tx.status == 'PENDING' %}
+                                            <a href="/approve/{{ tx.id }}" class="btn btn-sm btn-success me-1 px-2 py-1"><i class="fa-solid fa-check"></i> Approve</a>
+                                            <a href="/reject/{{ tx.id }}" class="btn btn-sm btn-danger px-2 py-1"><i class="fa-solid fa-xmark"></i> Reject</a>
+                                        {% else %}
+                                            <span class="text-secondary small">Completed</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+                                                                                     </html>
